@@ -7,34 +7,39 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("IdeaMart Backend Running");
+  res.json({
+    success: true,
+    message: "Backend Running"
+  });
 });
 
 app.post("/subscribe", (req, res) => {
-  console.log("Subscribe Request:", req.body);
+
+  console.log(req.body);
 
   res.json({
     success: true,
     message: "OTP Sent Successfully"
   });
+
 });
 
 app.post("/verify", (req, res) => {
-  console.log("Verify Request:", req.body);
 
   res.json({
     success: true,
     message: "OTP Verified Successfully"
   });
+
 });
 
 app.post("/unsubscribe", (req, res) => {
-  console.log("Unsubscribe Request:", req.body);
 
   res.json({
     success: true,
     message: "Unsubscribed Successfully"
   });
+
 });
 
 const PORT = process.env.PORT || 5000;
