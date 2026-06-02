@@ -1,59 +1,161 @@
-const express = require("express");
-const cors = require("cors");
+<!DOCTYPE html>
+<html>
 
-const app = express();
+<head>
+  <title>IdeaMart OTP</title>
 
-app.use(cors());
-app.use(express.json());
+  <style>
 
-app.get("/", (req, res) => {
+    body{
+      background:#0f172a;
+      font-family:Arial;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      color:white;
+    }
 
-  res.json({
-    success: true,
-    message: "Backend Running"
-  });
+    .box{
+      width:320px;
+      background:#1e293b;
+      padding:25px;
+      border-radius:15px;
+    }
 
-});
+    input{
+      width:100%;
+      padding:12px;
+      margin-top:10px;
+      border:none;
+      border-radius:10px;
+    }
 
-app.post("/subscribe", (req, res) => {
+    button{
+      width:100%;
+      padding:12px;
+      margin-top:10px;
+      border:none;
+      border-radius:10px;
+      background:#0ea5e9;
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
+    }
 
-  console.log("BODY =", req.body);
+    #msg{
+      margin-top:15px;
+      text-align:center;
+    }
 
-  res.setHeader("Content-Type", "application/json");
+  </style>
 
-  return res.status(200).json({
-    success: true,
-    message: "OTP Sent Successfully"
-  });
+</head>
 
-});
+<body>
 
-app.post("/verify", (req, res) => {
+<div class="box">
 
-  console.log("VERIFY =", req.body);
+  <h1>IdeaMart OTP</h1>
 
-  return res.status(200).json({
-    success: true,
-    message: "OTP Verified Successfully"
-  });
+  <input
+    type="text"
+    id="mobile"
+    placeholder="Mobile Number"
+  >
 
-});
+  <button onclick="subscribeUser()">
+    Subscribe
+  </button>
 
-app.post("/unsubscribe", (req, res) => {
+  <input
+    type="text"
+    id="otp"
+    placeholder="Enter OTP"
+  >
 
-  console.log("UNSUBSCRIBE =", req.body);
+  <button onclick="verifyOtp()">
+    Verify OTP
+  </button>
 
-  return res.status(200).json({
-    success: true,
-    message: "Unsubscribed Successfully"
-  });
+  <button onclick="unsubscribeUser()">
+    Unsubscribe
+  </button>
 
-});
+  <div id="msg"></div>
 
-const PORT = process.env.PORT || 5000;
+</div>
 
-app.listen(PORT, () => {
+<script>
 
-  console.log("Server running on port " + PORT);
+const API =
+"https://ideamart-backend-1.onrender.com";
 
-});
+function showMessage(text,color){
+
+  document.getElementById("msg").innerHTML =
+  `<p style="color:${color}">${text}</p>`;
+
+}
+
+async function subscribeUser(){
+
+  const mobile =
+  document.getElementById("mobile").value;
+
+  try{
+
+    const response = await fetch(
+      API + "/subscribe",
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+          mobile:mobile
+        })
+
+      }
+    );
+
+    const data = await response.json();
+
+    showMessage(data.message,"lightgreen");
+
+  }
+
+  catch(error){
+
+    console.log(error);
+
+    showMessage("Server Error","red");
+
+  }
+
+}
+
+async function verifyOtp(){
+
+  showMessage(
+    "OTP Verified Successfully",
+    "lightgreen"
+  );
+
+}
+
+async function unsubscribeUser(){
+
+  showMessage(
+    "Unsubscribed Successfully",
+    "orange"
+  );
+
+}
+
+</script>
+
+</body>
+</html>
